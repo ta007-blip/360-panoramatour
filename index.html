@@ -74,8 +74,8 @@
       z-index: 30;
       top: 18px;
       right: 18px;
-      width: min(460px, 42vw);
-      padding: 10px;
+      width: clamp(210px, 22vw, 280px);
+      padding: 8px;
       background: rgba(255,255,255,.94);
       border-radius: 10px;
       box-shadow: 0 3px 18px rgba(0,0,0,.38);
@@ -91,14 +91,14 @@
 
     .floorplan-title {
       margin: 0;
-      font-size: 15px;
+      font-size: 13px;
       font-weight: 700;
       color: #111;
     }
 
     .floorplan-current {
       margin: 0;
-      font-size: 12px;
+      font-size: 10px;
       color: #444;
     }
 
@@ -120,16 +120,16 @@
     /* 平面図上の地点マーカー */
     .plan-marker {
       position: absolute;
-      width: 34px;
-      height: 34px;
+      width: 28px;
+      height: 28px;
       transform: translate(-50%, -50%);
       border: 2px solid #fff;
       border-radius: 50%;
       background: #164f7d;
       color: #fff;
-      font-size: 12px;
+      font-size: 10px;
       font-weight: 700;
-      line-height: 30px;
+      line-height: 24px;
       text-align: center;
       cursor: pointer;
       box-shadow: 0 2px 7px rgba(0,0,0,.48);
@@ -148,18 +148,28 @@
       background: #ffd400;
       color: #111;
       border-color: #111;
-      transform: translate(-50%, -50%) scale(1.22);
+      transform: translate(-50%, -50%) scale(1.16);
       box-shadow:
-        0 0 0 6px rgba(255,212,0,.34),
+        0 0 0 4px rgba(255,212,0,.30),
         0 3px 10px rgba(0,0,0,.5);
+    }
+
+
+    .floorplan-wrap {
+      max-height: 42vh;
+    }
+
+    .floorplan-wrap img {
+      max-height: 42vh;
+      object-fit: contain;
     }
 
     @media (max-width: 800px) {
       .floorplan-panel {
         top: 10px;
         right: 10px;
-        width: min(360px, 54vw);
-        padding: 8px;
+        width: clamp(180px, 42vw, 230px);
+        padding: 7px;
       }
 
       .floorplan-title {
