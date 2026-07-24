@@ -33,7 +33,6 @@
       height: 100%;
     }
 
-    /* 下部のパノラマ切替タブ */
     .scene-menu {
       position: fixed;
       z-index: 20;
@@ -68,13 +67,12 @@
       color: #111;
     }
 
-    /* 右上の平面図 */
     .floorplan-panel {
       position: fixed;
       z-index: 30;
       top: 18px;
       right: 18px;
-      width: clamp(210px, 22vw, 20px);
+      width: clamp(210px, 22vw, 280px);
       padding: 8px;
       background: rgba(255,255,255,.94);
       border-radius: 10px;
@@ -85,8 +83,8 @@
       display: flex;
       align-items: baseline;
       justify-content: space-between;
-      gap: 10px;
-      margin: 0 2px 8px;
+      gap: 8px;
+      margin: 0 2px 7px;
     }
 
     .floorplan-title {
@@ -102,9 +100,15 @@
       color: #444;
     }
 
+    /*
+      重要：
+      平面図画像とマーカー層を同じ1425:1215の座標系に固定。
+      これにより、Miro上で拡大・縮小されても位置がずれません。
+    */
     .floorplan-wrap {
       position: relative;
       width: 100%;
+      aspect-ratio: 1425 / 1215;
       overflow: hidden;
       border: 1px solid #d0d0d0;
       border-radius: 6px;
@@ -112,56 +116,55 @@
     }
 
     .floorplan-wrap img {
+      position: absolute;
+      inset: 0;
       display: block;
       width: 100%;
-      height: auto;
+      height: 100%;
+      object-fit: fill;
     }
 
-    /* 平面図上の地点マーカー */
+    /*
+      平面図に既に「17・184・210」が描かれているため、
+      文字を重複表示せず、選択中の地点に黄色いリングだけを表示します。
+    */
     .plan-marker {
       position: absolute;
-      width: 28px;
-      height: 28px;
+      width: 20px;
+      height: 20px;
+      padding: 0;
       transform: translate(-50%, -50%);
-      border: 2px solid #fff;
+      border: 0;
       border-radius: 50%;
-      background: #164f7d;
-      color: #fff;
-      font-size: 10px;
-      font-weight: 700;
-      line-height: 24px;
-      text-align: center;
+      background: transparent;
       cursor: pointer;
-      box-shadow: 0 2px 7px rgba(0,0,0,.48);
+      z-index: 3;
+    }
+
+    .plan-marker::before {
+      content: "";
+      position: absolute;
+      inset: 2px;
+      border-radius: 50%;
+      border: 2px solid transparent;
       transition:
         transform .18s ease,
-        background .18s ease,
-        color .18s ease,
-        box-shadow .18s ease;
+        border-color .18s ease,
+        box-shadow .18s ease,
+        background .18s ease;
     }
 
-    .plan-marker:hover {
-      transform: translate(-50%, -50%) scale(1.10);
+    .plan-marker:hover::before {
+      border-color: rgba(255, 212, 0, .75);
     }
 
-    .plan-marker.active {
-      background: #ffd400;
-      color: #111;
-      border-color: #111;
-      transform: translate(-50%, -50%) scale(1.16);
+    .plan-marker.active::before {
+      border: 3px solid #ffd400;
+      background: rgba(255, 212, 0, .12);
       box-shadow:
-        0 0 0 4px rgba(255,212,0,.30),
-        0 3px 10px rgba(0,0,0,.5);
-    }
-
-
-    .floorplan-wrap {
-      max-height: 42vh;
-    }
-
-    .floorplan-wrap img {
-      max-height: 42vh;
-      object-fit: contain;
+        0 0 0 3px rgba(255,212,0,.30),
+        0 2px 7px rgba(0,0,0,.45);
+      transform: scale(1.22);
     }
 
     @media (max-width: 800px) {
@@ -172,25 +175,15 @@
         padding: 7px;
       }
 
-      .floorplan-title {
-        font-size: 13px;
-      }
-
-      .floorplan-current {
-        font-size: 10px;
-      }
-
-      .plan-marker {
-        width: 30px;
-        height: 30px;
-        line-height: 26px;
-        font-size: 11px;
-      }
-
       .scene-button {
         min-width: 125px;
         padding: 9px 11px;
         font-size: 13px;
+      }
+
+      .plan-marker {
+        width: 18px;
+        height: 18px;
       }
     }
   </style>
@@ -213,25 +206,25 @@
       <button
         class="plan-marker active"
         data-scene="scene17"
-        style="left: 38.77; top: 22.96%;"
+        style="left: 38.771930%;
+               top: 22.921811%;"
         aria-label="panorama17.jpgを表示">
-        17
       </button>
 
       <button
         class="plan-marker"
         data-scene="scene184"
-        style="left: 44.81%; top: 80.86%;"
+        style="left: 44.842105%;
+               top: 80.864198%;"
         aria-label="panorama184.jpgを表示">
-        184
       </button>
 
       <button
         class="plan-marker"
         data-scene="scene210"
-        style="left: 51.68%; top: 80.86%;"
+        style="left: 51.684211%;
+               top: 80.864198%;"
         aria-label="panorama210.jpgを表示">
-        210
       </button>
     </div>
   </aside>
