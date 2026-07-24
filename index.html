@@ -14,9 +14,12 @@
   </script>
 
   <style>
-    * { box-sizing: border-box; }
+    * {
+      box-sizing: border-box;
+    }
 
-    html, body {
+    html,
+    body {
       width: 100%;
       height: 100%;
       margin: 0;
@@ -50,18 +53,31 @@
       flex: 0 0 auto;
       min-width: 110px;
       padding: 10px 14px;
-      border: 1px solid rgba(255,255,255,.65);
+      border: 1px solid rgba(255, 255, 255, 0.65);
       border-radius: 7px;
-      background: rgba(30,30,30,.82);
-      color: #fff;
+      background: rgba(30, 30, 30, 0.82);
+      color: white;
       font-size: 14px;
       cursor: pointer;
     }
 
     .scene-button:hover,
     .scene-button.active {
-      background: #fff;
+      background: white;
       color: #111;
+    }
+
+    @media (max-width: 600px) {
+      .scene-menu {
+        justify-content: flex-start;
+        bottom: 10px;
+      }
+
+      .scene-button {
+        min-width: 96px;
+        padding: 9px 11px;
+        font-size: 13px;
+      }
     }
   </style>
 </head>
@@ -70,25 +86,25 @@
   <div id="panorama"></div>
 
   <nav class="scene-menu" aria-label="パノラマ切替">
-    <button class="scene-button active" data-scene="scene17">Panorama 17</button>
-    <button class="scene-button" data-scene="scene184">Panorama 184</button>
-    <button class="scene-button" data-scene="scene210">Panorama 210</button>
+    <button class="scene-button active" data-scene="scene1">地点1</button>
+    <button class="scene-button" data-scene="scene2">地点2</button>
+    <button class="scene-button" data-scene="scene3">地点3</button>
   </nav>
 
   <script>
     const viewer = pannellum.viewer("panorama", {
       default: {
-        firstScene: "scene17",
+        firstScene: "scene1",
         autoLoad: true,
-        sceneFadeDuration: 700,
+        sceneFadeDuration: 800,
         showControls: true,
         showFullscreenCtrl: true,
         compass: false
       },
 
       scenes: {
-        scene17: {
-          title: "Panorama 17",
+        scene1: {
+          title: "地点1",
           type: "equirectangular",
           panorama: "panorama17.jpg",
           yaw: 0,
@@ -96,8 +112,8 @@
           hfov: 100
         },
 
-        scene184: {
-          title: "Panorama 184",
+        scene2: {
+          title: "地点2",
           type: "equirectangular",
           panorama: "panorama184.jpg",
           yaw: 0,
@@ -105,8 +121,8 @@
           hfov: 100
         },
 
-        scene210: {
-          title: "Panorama 210",
+        scene3: {
+          title: "地点3",
           type: "equirectangular",
           panorama: "panorama210.jpg",
           yaw: 0,
@@ -120,13 +136,20 @@
 
     buttons.forEach((button) => {
       button.addEventListener("click", () => {
-        viewer.loadScene(button.dataset.scene);
+        const sceneId = button.dataset.scene;
+        viewer.loadScene(sceneId);
+
+        buttons.forEach((item) => item.classList.remove("active"));
+        button.classList.add("active");
       });
     });
 
     viewer.on("scenechange", (sceneId) => {
       buttons.forEach((button) => {
-        button.classList.toggle("active", button.dataset.scene === sceneId);
+        button.classList.toggle(
+          "active",
+          button.dataset.scene === sceneId
+        );
       });
     });
   </script>
