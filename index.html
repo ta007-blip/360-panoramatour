@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>360° Panorama Tour</title>
+
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/pannellum@2.5.7/build/pannellum.css"
+  >
+  <script
+    src="https://cdn.jsdelivr.net/npm/pannellum@2.5.7/build/pannellum.js">
+  </script>
+
+  <style>
+    * { box-sizing: border-box; }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      overflow: hidden;
+      background: #111;
+      font-family: Arial, "Helvetica Neue", sans-serif;
+    }
+
+    #panorama {
+      width: 100%;
+      height: 100%;
+    }
+
+    .scene-menu {
+      position: fixed;
+      z-index: 10;
+      left: 50%;
+      bottom: 18px;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 8px;
+      max-width: calc(100vw - 24px);
+      padding: 8px;
+      overflow-x: auto;
+      background: rgba(0, 0, 0, 0.62);
+      border-radius: 10px;
+      backdrop-filter: blur(5px);
+    }
+
+    .scene-button {
+      flex: 0 0 auto;
+      min-width: 110px;
+      padding: 10px 14px;
+      border: 1px solid rgba(255,255,255,.65);
+      border-radius: 7px;
+      background: rgba(30,30,30,.82);
+      color: #fff;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    .scene-button:hover,
+    .scene-button.active {
+      background: #fff;
+      color: #111;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="panorama"></div>
+
+  <nav class="scene-menu" aria-label="パノラマ切替">
+    <button class="scene-button active" data-scene="scene17">Panorama 17</button>
+    <button class="scene-button" data-scene="scene184">Panorama 184</button>
+    <button class="scene-button" data-scene="scene210">Panorama 210</button>
+  </nav>
+
+  <script>
+    const viewer = pannellum.viewer("panorama", {
+      default: {
+        firstScene: "scene17",
+        autoLoad: true,
+        sceneFadeDuration: 700,
+        showControls: true,
+        showFullscreenCtrl: true,
+        compass: false
+      },
+
+      scenes: {
+        scene17: {
+          title: "Panorama 17",
+          type: "equirectangular",
+          panorama: "panorama17.jpg",
+          yaw: 0,
+          pitch: 0,
+          hfov: 100
+        },
+
+        scene184: {
+          title: "Panorama 184",
+          type: "equirectangular",
+          panorama: "panorama184.jpg",
+          yaw: 0,
+          pitch: 0,
+          hfov: 100
+        },
+
+        scene210: {
+          title: "Panorama 210",
+          type: "equirectangular",
+          panorama: "panorama210.jpg",
+          yaw: 0,
+          pitch: 0,
+          hfov: 100
+        }
+      }
+    });
+
+    const buttons = document.querySelectorAll(".scene-button");
+
+    buttons.forEach((button) => {
+      button.addEventListener("click", () => {
+        viewer.loadScene(button.dataset.scene);
+      });
+    });
+
+    viewer.on("scenechange", (sceneId) => {
+      buttons.forEach((button) => {
+        button.classList.toggle("active", button.dataset.scene === sceneId);
+      });
+    });
+  </script>
+</body>
+</html>
